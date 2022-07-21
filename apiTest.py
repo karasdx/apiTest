@@ -1,8 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_restful import Resource, Api
-
 
 #create flask app
 app = Flask(__name__)
@@ -11,8 +10,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 ma=Marshmallow(app)
 api=Api(app)
+#@app.route('/test',methods=['GET'])
+@app.route('/user', methods=['GET', 'POST'])
+#test
+#def test():
+	#if request.method == "GET":
+		#return jsonify({"response":"Get Request Called"})
 
-#Station resource
+#User resource
 class User(db.Model):
 	id=db.Column(db.Integer, primary_key=True)
 	email=db.Column(db.String(100))
@@ -28,11 +33,11 @@ class UserSchema(ma.Schema):
 	class Meta:
 		fields=('id', 'email', 'password', 'username', 'created_at', 'updated_at')
 
-#create a schema for one station and one for a list of stations
+#create a schema for one user and one for a list of users
 user_schema=UserSchema()
 users_schema=UserSchema(many=True)
 
-#get lists of all station resource and post a new 
+#get lists of all user resource and post a new 
 class UserListResource(Resource):
 	def get(self):
 		users=User.query.all()
@@ -67,7 +72,7 @@ class UserResource(Resource):
         if 'updated_at' in request.json:
             user.updated_at = request.json['updated_at'] 
         db.session.commit()
-        return station_schema.dump(station)
+        return station_schema.dump(user)
 
     def delete(self, user_id):
         user = User.query.get_or_404(user_id)
