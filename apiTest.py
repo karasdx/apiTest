@@ -26,7 +26,7 @@ class User(db.Model):
 	created_at=db.Column(db.DateTime())
 	updated_at=db.Column(db.DateTime())
 	def __repr__(self):
-		return '<Station %s>' % self.name
+		return '<User %s>' % self.name
 
 #Marshmallow schema class
 class UserSchema(ma.Schema):
@@ -60,7 +60,7 @@ class UserResource(Resource):
         user = User.query.get_or_404(user_id)
         return user_schema.dump(user)
     def patch(self, user_id):
-        user = Station.query.get_or_404(user_id)
+        user = User.query.get_or_404(user_id)
         if 'email' in request.json:
             user.email = request.json['email']
         if 'password' in request.json:
@@ -72,7 +72,7 @@ class UserResource(Resource):
         if 'updated_at' in request.json:
             user.updated_at = request.json['updated_at'] 
         db.session.commit()
-        return station_schema.dump(user)
+        return suser_schema.dump(user)
 
     def delete(self, user_id):
         user = User.query.get_or_404(user_id)
